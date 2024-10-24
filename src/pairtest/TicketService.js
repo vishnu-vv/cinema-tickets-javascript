@@ -30,7 +30,13 @@ export default class TicketService {
 
     const ticketTypeRequests = this.#initializeTicketRequests(tickets);
 
+    this.#validateTicketRequests(ticketTypeRequests);
+
     const totalTickets = this.#getTotalTickets(ticketTypeRequests);
+    if (totalTickets > 25) {
+      throw new InvalidPurchaseException('Cannot purchase more than 25 tickets');
+    }
+
     const totalCost = this.#calculateTotalCost(ticketTypeRequests);
     const totalSeats = this.#calculateTotalSeats(ticketTypeRequests);
 
@@ -41,6 +47,16 @@ export default class TicketService {
     return Object.entries(tickets).map(([type, count]) => {
       return new TicketTypeRequest(type, count);
     });
+  }
+
+  #validateTicketRequests(ticketTypeRequests) {
+    let hasAdult = false;
+
+    hasAdult = ticketTypeRequests.some(request => request.getTicketType() === 'ADULT' && request.getNoOfTickets() > 0);
+
+    if (!hasAdult) {
+      throw new InvalidPurchaseException('At least one adult ticket is required');
+    }
   }
 
   #getTotalTickets(ticketTypeRequests) {
