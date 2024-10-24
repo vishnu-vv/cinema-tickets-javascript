@@ -6,7 +6,8 @@ export default class TicketService {
    * Should only have private methods other than the one below.
    */
 
-  purchaseTickets(accountId, ...ticketTypeRequests) {
+  async purchaseTickets(accountId, ...ticketTypeRequests) {
     // throws InvalidPurchaseException
+    return Promise.resolve();
   }
 }
