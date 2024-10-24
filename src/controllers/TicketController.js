@@ -16,8 +16,11 @@ export default class TicketController {
       this.ticketService.purchaseTickets(accountId, tickets);
       return res.status(200).json({ message: 'Tickets purchased successfully' });
     } catch (error) {
-      console.log(error);
-      return res.status(400).json({ error: error.message });
+      if (error instanceof InvalidPurchaseException) {
+        return res.status(400).json({ error: error.message });
+      }
+
+      return res.status(500).json({ error: 'An internal server error occurred' });
     }
   }
 }
