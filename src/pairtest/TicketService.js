@@ -31,10 +31,10 @@ export default class TicketService {
     const ticketTypeRequests = this.#initializeTicketRequests(tickets);
 
     const totalTickets = this.#getTotalTickets(ticketTypeRequests);
-
     const totalCost = this.#calculateTotalCost(ticketTypeRequests);
+    const totalSeats = this.#calculateTotalSeats(ticketTypeRequests);
 
-    return { totalTickets, totalCost };
+    return { totalTickets, totalCost, totalSeats };
   }
 
   #initializeTicketRequests(tickets) {
@@ -50,6 +50,15 @@ export default class TicketService {
   #calculateTotalCost(ticketTypeRequests) {
     return ticketTypeRequests.reduce((total, request) => {
       return total + (TICKET_PRICES[request.getTicketType().toUpperCase()] * request.getNoOfTickets());
+    }, 0);
+  }
+
+  #calculateTotalSeats(ticketTypeRequests) {
+    return ticketTypeRequests.reduce((total, request) => {
+      if (request.getTicketType().toUpperCase() !== 'INFANT') {
+        return total + request.getNoOfTickets();
+      }
+      return total;
     }, 0);
   }
 }
