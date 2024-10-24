@@ -8,13 +8,13 @@ export default class TicketController {
   purchase = async (req, res) => {
     const { accountId, tickets } = req.body;
 
-    if (!accountId || !tickets || !Array.isArray(tickets)) {
+    if (!accountId || !tickets) {
       return res.status(400).json({ error: 'Invalid request: accountId and tickets are required' });
     }
 
     try {
-      this.ticketService.purchaseTickets(accountId, tickets);
-      return res.status(200).json({ message: 'Tickets purchased successfully' });
+      const totalTickets = await this.ticketService.purchaseTickets(accountId, tickets);
+      return res.status(200).json({ message: `${totalTickets} Tickets purchased successfully` });
     } catch (error) {
       if (error instanceof InvalidPurchaseException) {
         return res.status(400).json({ error: error.message });
