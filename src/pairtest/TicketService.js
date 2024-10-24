@@ -32,7 +32,9 @@ export default class TicketService {
 
     const totalTickets = this.#getTotalTickets(ticketTypeRequests);
 
-    return totalTickets;
+    const totalCost = this.#calculateTotalCost(ticketTypeRequests);
+
+    return { totalTickets, totalCost };
   }
 
   #initializeTicketRequests(tickets) {
@@ -43,5 +45,11 @@ export default class TicketService {
 
   #getTotalTickets(ticketTypeRequests) {
     return ticketTypeRequests.reduce((sum, request) => sum + request.getNoOfTickets(), 0);
+  }
+
+  #calculateTotalCost(ticketTypeRequests) {
+    return ticketTypeRequests.reduce((total, request) => {
+      return total + (TICKET_PRICES[request.getTicketType().toUpperCase()] * request.getNoOfTickets());
+    }, 0);
   }
 }

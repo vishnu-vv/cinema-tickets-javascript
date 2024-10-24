@@ -14,8 +14,8 @@ export default class TicketController {
     }
 
     try {
-      const totalTickets = await this.ticketService.purchaseTickets(accountId, tickets);
-      return res.status(200).json({ message: `${totalTickets} Tickets purchased successfully` });
+      const { totalTickets, totalCost } = await this.ticketService.purchaseTickets(accountId, tickets);
+      return res.status(200).json({ message: `${totalTickets} Tickets purchased successfully for ${totalCost}` });
     } catch (error) {
       if (error instanceof InvalidPurchaseException) {
         return res.status(400).json({ error: error.message });
