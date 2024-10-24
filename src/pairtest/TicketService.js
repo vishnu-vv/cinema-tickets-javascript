@@ -3,17 +3,6 @@ import InvalidPurchaseException from './lib/InvalidPurchaseException.js';
 import TicketPaymentService from '../thirdparty/paymentgateway/TicketPaymentService.js';
 import SeatReservationService from '../thirdparty/seatbooking/SeatReservationService.js';
 
-/* Sample Ticket Request
-{ 
-  accountId,
-  tickets: {
-    'ADULT': 2,
-    'CHILD': 1,
-    'INFANT': 1
-  }
-}
-*/
-
 const TICKET_PRICES = {
   INFANT: 0,
   CHILD: 15,
@@ -23,6 +12,18 @@ const TICKET_PRICES = {
 export default class TicketService {
   /**
    * Should only have private methods other than the one below.
+   * purchaseTickets(accountId, tickets)
+   * 
+   * Sample Ticket Request
+   * 
+   * { 
+   *   accountId,
+   *   tickets: {
+   *     'ADULT': 2,
+   *     'CHILD': 1,
+   *     'INFANT': 1
+   *   }
+   * }
    */
 
   constructor() {
