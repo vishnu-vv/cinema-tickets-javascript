@@ -1,5 +1,7 @@
 import TicketTypeRequest from './lib/TicketTypeRequest.js';
 import InvalidPurchaseException from './lib/InvalidPurchaseException.js';
+import TicketPaymentService from '../thirdparty/paymentgateway/TicketPaymentService.js';
+import SeatReservationService from '../thirdparty/seatbooking/SeatReservationService.js';
 
 /* Sample Ticket Request
 { 
@@ -23,6 +25,11 @@ export default class TicketService {
    * Should only have private methods other than the one below.
    */
 
+  constructor() {
+    this.ticketPaymentService = new TicketPaymentService();
+    this.seatReservationService = new SeatReservationService();
+  }
+
   async purchaseTickets(accountId, tickets) {
     if (accountId <= 0) {
       throw new InvalidPurchaseException('Invalid Account ID');
@@ -39,6 +46,9 @@ export default class TicketService {
 
     const totalCost = this.#calculateTotalCost(ticketTypeRequests);
     const totalSeats = this.#calculateTotalSeats(ticketTypeRequests);
+
+    this.#makePayment(accountId, totalCost);
+    this.#reserveSeats(accountId, totalSeats);
 
     return { totalTickets, totalCost, totalSeats };
   }
@@ -76,5 +86,13 @@ export default class TicketService {
       }
       return total;
     }, 0);
+  }
+
+  #makePayment(accountId, totalCost) {
+    this.ticketPaymentService.makePayment(accountId, totalCost);
+  }
+
+  #reserveSeats(accountId, totalSeats) {
+    this.seatReservationService.reserveSeat(accountId, totalSeats);
   }
 }
