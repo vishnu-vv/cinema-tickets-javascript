@@ -8,6 +8,10 @@ app.use(express.json())
 
 app.use('/ticket', ticketRoutes);
 
+app.use((err, req, res, next) => {
+  res.status(500).json({ error: err.message });
+});
+
 app.listen(port, () => {
   console.log(`Ticket Purchase App is listening on port ${port}`)
 })
