@@ -32,11 +32,21 @@ export default class TicketService {
   }
 
   async purchaseTickets(accountId, tickets) {
+    if (!accountId || !tickets) {
+      throw new InvalidPurchaseException('Invalid purchase request: accountId and tickets are required');
+    }
+
     if (accountId <= 0) {
       throw new InvalidPurchaseException('Invalid Account ID');
     }
 
-    const ticketTypeRequests = this.#initializeTicketRequests(tickets);
+    const ticketEntries = Object.entries(tickets);
+
+    if (ticketEntries.length === 0) {
+      throw new InvalidPurchaseException('Ticket param cannot be empty');
+    }
+
+    const ticketTypeRequests = this.#initializeTicketRequests(ticketEntries);
 
     this.#validateTicketRequests(ticketTypeRequests);
 
@@ -55,7 +65,7 @@ export default class TicketService {
   }
 
   #initializeTicketRequests(tickets) {
-    return Object.entries(tickets).map(([type, count]) => {
+    return tickets.map(([type, count]) => {
       return new TicketTypeRequest(type, count);
     });
   }
