@@ -24,6 +24,10 @@ export default class TicketService {
    */
 
   async purchaseTickets(accountId, tickets) {
+    if (accountId <= 0) {
+      throw new InvalidPurchaseException('Invalid Account ID');
+    }
+
     const ticketTypeRequests = this.#initializeTicketRequests(tickets);
 
     const totalTickets = this.#getTotalTickets(ticketTypeRequests);

@@ -1,4 +1,5 @@
 import TicketService from '../pairtest/TicketService.js';
+import InvalidPurchaseException from '../pairtest/lib/InvalidPurchaseException.js';
 
 export default class TicketController {
   constructor() {
